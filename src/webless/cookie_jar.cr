@@ -1,4 +1,4 @@
-class HttpTest::CookieJar
+class Webless::CookieJar
   @cookies = [] of HTTP::Cookie
 
   def []=(name : String, value : String)
@@ -77,6 +77,6 @@ class HttpTest::CookieJar
   end
 
   private def default_host : String
-    HttpTest::DEFAULT_HOST
+    Webless::DEFAULT_HOST
   end
 end

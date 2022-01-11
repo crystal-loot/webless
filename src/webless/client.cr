@@ -1,16 +1,16 @@
-class HttpTest::Client < HTTP::Client
+class Webless::Client < HTTP::Client
   @port = -1
 
   @app : HTTP::Handler | HTTP::Handler::HandlerProc
   @last_response : HTTP::Client::Response?
   @last_request : HTTP::Request?
-  getter cookie_jar = HttpTest::CookieJar.new
+  getter cookie_jar = Webless::CookieJar.new
 
   def self.new(&app : HTTP::Handler::HandlerProc) : self
     new(app)
   end
 
-  def initialize(@app, @host = HttpTest::DEFAULT_HOST)
+  def initialize(@app, @host = Webless::DEFAULT_HOST)
   end
 
   def exec_internal(request : HTTP::Request) : HTTP::Client::Response
@@ -39,7 +39,7 @@ class HttpTest::Client < HTTP::Client
   end
 
   def clear_cookies
-    @cookie_jar = HttpTest::CookieJar.new
+    @cookie_jar = Webless::CookieJar.new
   end
 
   def follow_redirect! : HTTP::Client::Response

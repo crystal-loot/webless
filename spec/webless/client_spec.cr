@@ -1,10 +1,10 @@
 require "../spec_helper"
 
-Spectator.describe HttpTest::Client do
+Spectator.describe Webless::Client do
   it "sends context directly to HTTP handler" do
     result = nil
 
-    client = HttpTest::Client.new do |context|
+    client = Webless::Client.new do |context|
       result = context
     end
 
@@ -15,7 +15,7 @@ Spectator.describe HttpTest::Client do
   end
 
   it "handles cookies" do
-    client = HttpTest::Client.new do |context|
+    client = Webless::Client.new do |context|
       context.response.cookies["foo"] = "bar"
     end
 
@@ -25,7 +25,7 @@ Spectator.describe HttpTest::Client do
   end
 
   it "can set cookies" do
-    client = HttpTest::Client.new do |context|
+    client = Webless::Client.new do |context|
       cookie = context.request.cookies["foo"]
       context.response.cookies["foo"] = "#{cookie.value}1"
     end
@@ -40,7 +40,7 @@ Spectator.describe HttpTest::Client do
   # this allows wrappers of this library to not have to
   # add code to keep up with it themselves
   it "provides access to last response" do
-    client = HttpTest::Client.new do |context|
+    client = Webless::Client.new do |context|
       context.response.status = HTTP::Status::BAD_REQUEST
     end
 
@@ -50,7 +50,7 @@ Spectator.describe HttpTest::Client do
   end
 
   it "can clear cookies" do
-    client = HttpTest::Client.new do |context|
+    client = Webless::Client.new do |context|
       context.response.cookies["foo"] = "bar"
     end
 
@@ -64,7 +64,7 @@ Spectator.describe HttpTest::Client do
   end
 
   it "does not overwrite cookie with different path" do
-    client = HttpTest::Client.new do |context|
+    client = Webless::Client.new do |context|
       context.response.cookies << HTTP::Cookie.new("foo", "bazz", path: "/asdf")
     end
 
@@ -78,7 +78,7 @@ Spectator.describe HttpTest::Client do
   end
 
   it "does not send cookies for specific path to different path request" do
-    client = HttpTest::Client.new do |context|
+    client = Webless::Client.new do |context|
       expect(context.request.cookies["foo"]?).to be_nil
     end
 
@@ -88,7 +88,7 @@ Spectator.describe HttpTest::Client do
   end
 
   it "can follow redirects" do
-    client = HttpTest::Client.new do |context|
+    client = Webless::Client.new do |context|
       if context.request.path == "/foo"
         context.response.status = HTTP::Status::MOVED_PERMANENTLY
         context.response.headers["Location"] = "/bar"
@@ -102,6 +102,6 @@ Spectator.describe HttpTest::Client do
 
     expect(response.status).to eq(HTTP::Status::NO_CONTENT)
     expect(client.last_request.resource).to eq("/bar")
-    expect(client.last_request.headers["Referrer"]).to eq("https://#{HttpTest::DEFAULT_HOST}/foo")
+    expect(client.last_request.headers["Referrer"]).to eq("https://#{Webless::DEFAULT_HOST}/foo")
   end
 end

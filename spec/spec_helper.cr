@@ -1,4 +1,4 @@
-require "../src/http_test"
+require "../src/webless"
 require "spectator"
 
 Spectator.configure do |config|

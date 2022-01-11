@@ -1,4 +1,4 @@
-# http_test
+# webless
 
 TODO: Write a description here
 
@@ -8,8 +8,8 @@ TODO: Write a description here
 
    ```yaml
    dependencies:
-     http_test:
-       github: matthewmcgarvey/http_test
+     webless:
+       github: matthewmcgarvey/webless
    ```
 
 2. Run `shards install`
@@ -17,7 +17,7 @@ TODO: Write a description here
 ## Usage
 
 ```crystal
-require "http_test"
+require "webless"
 ```
 
 TODO: Write usage instructions here
@@ -28,7 +28,7 @@ TODO: Write development instructions here
 
 ## Contributing
 
-1. Fork it (<https://github.com/matthewmcgarvey/http_test/fork>)
+1. Fork it (<https://github.com/matthewmcgarvey/webless/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
