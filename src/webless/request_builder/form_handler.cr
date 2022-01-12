@@ -36,23 +36,7 @@ class Webless::RequestBuilder::FormHandler
     if multipart?
       io = IO::Memory.new
       builder = HTTP::FormData::Builder.new(io)
-      @form.each do |k, v|
-        case v
-        when File
-          builder.file(k, v.as(IO), HTTP::FormData::FileMetadata.new(filename: File.basename(v.path)))
-        when Array
-          v.each do |e|
-            case e
-            when File
-              builder.file(k, e.as(IO), HTTP::FormData::FileMetadata.new(filename: File.basename(e.path)))
-            else
-              builder.field(k, e.to_s)
-            end
-          end
-        else
-          builder.field(k, v.to_s)
-        end
-      end
+      @form.each { |k, v| apply_multipart(builder, k, v) }
       builder.finish
 
       {body: io.to_s, content_type: builder.content_type}
@@ -62,9 +46,19 @@ class Webless::RequestBuilder::FormHandler
     end
   end
 
-  def multipart? : Bool
+  private def multipart? : Bool
     @form.any? do |_, v|
       v.is_a?(File) || (v.is_a?(Array) && v.any?(File))
+    end
+  end
+
+  private def apply_multipart(builder : HTTP::FormData::Builder, k : String, v : FormType)
+    if v.is_a?(File)
+      builder.file(k, v.as(IO), HTTP::FormData::FileMetadata.new(filename: File.basename(v.path)))
+    elsif v.is_a?(Array)
+      v.each { |item| apply_multipart(builder, k, item) }
+    else
+      builder.field(k, v.to_s)
     end
   end
 end
