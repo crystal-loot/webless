@@ -34,6 +34,11 @@ class Webless::Client < HTTP::Client
     @last_request.not_nil!
   end
 
+  # Added because the URL is not accessible on the request
+  def last_request_url : String
+    uri_for_request(last_request).to_s
+  end
+
   def last_response : HTTP::Client::Response
     @last_response.not_nil!
   end
