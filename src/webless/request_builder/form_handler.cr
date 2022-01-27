@@ -1,8 +1,8 @@
 class Webless::RequestBuilder::FormHandler
   alias FormType = Symbol | String | Int32 | Int64 | Float64 | Bool | File | Array(FormType) | Hash(String, FormType)
 
-  def self.handle(form : Hash(String, _) | NamedTuple) : NamedTuple(body: String, content_type: String)
-    new(cast(form).as(Hash(String, FormType))).handle
+  def self.handle(form : Hash(String, _) | NamedTuple, multipart : Bool) : NamedTuple(body: String, content_type: String)
+    new(cast(form).as(Hash(String, FormType)), multipart).handle
   end
 
   private def self.cast(raw : Array) : FormType
@@ -28,12 +28,13 @@ class Webless::RequestBuilder::FormHandler
   end
 
   @form : Hash(String, FormType)
+  @multipart : Bool
 
-  def initialize(@form)
+  def initialize(@form, @multipart)
   end
 
   def handle : NamedTuple(body: String, content_type: String)
-    if multipart?
+    if @multipart
       io = IO::Memory.new
       builder = HTTP::FormData::Builder.new(io)
       @form.each { |k, v| apply_multipart(builder, k, v) }
@@ -43,12 +44,6 @@ class Webless::RequestBuilder::FormHandler
     else
       body = HTTP::Params.encode(@form)
       {body: body, content_type: "application/x-www-form-urlencoded"}
-    end
-  end
-
-  private def multipart? : Bool
-    @form.any? do |_, v|
-      v.is_a?(File) || (v.is_a?(Array) && v.any?(File))
     end
   end
 

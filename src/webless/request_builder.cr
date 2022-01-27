@@ -52,8 +52,8 @@ class Webless::RequestBuilder
     clone.tap(&.params[key] = value)
   end
 
-  def form(form : Hash(String, _) | NamedTuple) : RequestBuilder
-    result = FormHandler.handle(form)
+  def form(form : Hash(String, _) | NamedTuple, multipart : Bool = false) : RequestBuilder
+    result = FormHandler.handle(form, multipart)
     body(result[:body]).content_type(result[:content_type])
   end
 
