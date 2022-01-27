@@ -1,7 +1,7 @@
 class Webless::RequestBuilder
   alias BodyType = String | Bytes | IO | Nil
 
-  protected property method : Symbol?
+  protected property method : String?
   protected property path : String?
   protected property headers : HTTP::Headers
   protected property body : BodyType
@@ -24,8 +24,8 @@ class Webless::RequestBuilder
   protected def initialize(@method, @path, @headers, @body, @params)
   end
 
-  def method(method : Symbol) : RequestBuilder
-    clone.tap(&.method=(method))
+  def method(method : Symbol | String) : RequestBuilder
+    clone.tap(&.method=(method.to_s.upcase))
   end
 
   def path(path : String) : RequestBuilder
@@ -60,7 +60,7 @@ class Webless::RequestBuilder
   def build : HTTP::Request
     path = @path.not_nil!
     path += "?#{params}" if !params.empty?
-    HTTP::Request.new(@method.not_nil!.to_s, path, @headers, body)
+    HTTP::Request.new(@method.not_nil!, path, @headers, body)
   end
 
   def clone : RequestBuilder
