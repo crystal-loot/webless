@@ -31,5 +31,8 @@ jobs:
     runs-on: ${{matrix.os}}
     steps:
       - uses: actions/checkout@v4
+      - uses: crystal-lang/install-crystal@v1
+        with:
+          crystal: latest
       - run: shards install--skip-executables --skip-postinstall
       - run: crystal spec
