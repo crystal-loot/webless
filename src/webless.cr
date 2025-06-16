@@ -6,6 +6,6 @@ require "./webless/client"
 require "./webless/request_builder"
 
 module Webless
-  VERSION      = "0.1.0"
+  VERSION      = "0.2.0"
   DEFAULT_HOST = "example.com"
 end
