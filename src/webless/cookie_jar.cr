@@ -24,7 +24,7 @@ class Webless::CookieJar
   end
 
   def get_cookie(name : String) : HTTP::Cookie
-    get_cookie?(name).not_nil!
+    get_cookie?(name).as(HTTP::Cookie)
   end
 
   def get_cookie?(name : String) : HTTP::Cookie?
@@ -51,8 +51,8 @@ class Webless::CookieJar
   end
 
   private def sort!
-    @cookies.sort do |a, b|
-      to_sortable(a) <=> to_sortable(b)
+    @cookies.sort do |a_cookie, b_cookie|
+      to_sortable(a_cookie) <=> to_sortable(b_cookie)
     end
   end
 

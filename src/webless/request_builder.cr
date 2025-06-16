@@ -58,9 +58,9 @@ class Webless::RequestBuilder
   end
 
   def build : HTTP::Request
-    path = @path.not_nil!
+    path = @path.to_s
     path += "?#{params}" if !params.empty?
-    HTTP::Request.new(@method.not_nil!, path, @headers, body)
+    HTTP::Request.new(@method.to_s, path, @headers, body)
   end
 
   def clone : RequestBuilder

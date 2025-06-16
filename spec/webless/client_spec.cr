@@ -11,7 +11,7 @@ Spectator.describe Webless::Client do
     client.get("/foo")
 
     expect(result).not_to be_nil
-    expect(result.not_nil!.request).to have_attributes(path: "/foo", method: "GET")
+    expect(result.as(HTTP::Server::Context).request).to have_attributes(path: "/foo", method: "GET")
   end
 
   it "handles cookies" do
