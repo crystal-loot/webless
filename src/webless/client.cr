@@ -17,7 +17,11 @@ class Webless::Client < HTTP::Client
   # and now sometimes `path` here will be the whole URL.
   private def new_request(method, path, headers, body : BodyType)
     {% if compare_versions(Crystal::VERSION, "1.16.0") >= 0 %}
-      path = URI.parse(path).path
+      uri = URI.parse(path)
+      path = uri.path
+      uri.query.try do |query|
+        path += "?#{query}"
+      end
     {% end %}
     HTTP::Request.new(method, path, headers, body)
   end
