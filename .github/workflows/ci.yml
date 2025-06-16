@@ -34,5 +34,5 @@ jobs:
       - uses: crystal-lang/install-crystal@v1
         with:
           crystal: latest
-      - run: shards install--skip-executables --skip-postinstall
+      - run: shards install --skip-executables --skip-postinstall
       - run: crystal spec
