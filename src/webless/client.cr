@@ -13,6 +13,15 @@ class Webless::Client < HTTP::Client
   def initialize(@app, @host = Webless::DEFAULT_HOST)
   end
 
+  # HACK: Something changed in Crystal 1.16 with how request.resource works,
+  # and now sometimes `path` here will be the whole URL.
+  private def new_request(method, path, headers, body : BodyType)
+    {% if compare_versions(Crystal::VERSION, "1.16.0") >= 0 %}
+      path = URI.parse(path).path
+    {% end %}
+    HTTP::Request.new(method, path, headers, body)
+  end
+
   def exec_internal(request : HTTP::Request) : HTTP::Client::Response
     @last_request = request
     cookie_jar.for(uri_for_request(request)).add_request_headers(request.headers)
@@ -31,7 +40,7 @@ class Webless::Client < HTTP::Client
   end
 
   def last_request : HTTP::Request
-    @last_request.not_nil!
+    @last_request.as(HTTP::Request)
   end
 
   # Added because the URL is not accessible on the request
@@ -40,7 +49,7 @@ class Webless::Client < HTTP::Client
   end
 
   def last_response : HTTP::Client::Response
-    @last_response.not_nil!
+    @last_response.as(HTTP::Client::Response)
   end
 
   def clear_cookies

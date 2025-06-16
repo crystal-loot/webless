@@ -11,8 +11,8 @@ license: MIT
 development_dependencies:
   ameba:
     github: crystal-ameba/ameba
-    version: ~> 0.14.0
+    version: ~> 1.6.4
   spectator:
     gitlab: arctic-fox/spectator
-    version: ~> 0.10.3
+    version: ~> 0.12.0
 
